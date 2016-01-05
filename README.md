@@ -9,7 +9,6 @@ English
 Japanese  
 [http://www.petitmonte.com/pdfdesigner/howto.html](http://www.petitmonte.com/pdfdesigner/howto.html)  
 
-
 ## Download
 "pdf-designer.js" is Normal version (Not compressed version)  
 "pdf-designer-min.js"	 is Compressed version  
@@ -21,6 +20,14 @@ Japanese
   
 Normal version is the source code with comments. Compressed version is exactly the same as normal version and functionality. Shortening variable name and deleted the comment & space.
   
+## Supported file
+Files that have been created at such as "Microsoft Office, OpenOffice and Chrome". Format is a file that conforms to the PDF1.4 format (such as ISO 19005-1). PDF1.5 later file can not be basically correspondence. but, can read if Internally PDF1.4 format.  
+  
+Also, please understand that it can not respond If the PDF file is encrypted.
+
+## Open Source
+This PDFDesigner is an open source project of the "the various software of PDF creation & editing" for Windows that I created in 2003. The programming language has been published by transplanting from Delphi to JavaScript.
+
 ## Official site
 English  
 [http://www.petitmonte.com/pdfdesigner/en/](http://www.petitmonte.com/pdfdesigner/en/)  
