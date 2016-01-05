@@ -35,6 +35,7 @@ Japanese
 [http://www.petitmonte.com/pdfdesigner/](http://www.petitmonte.com/pdfdesigner/)
 
 ## Contact
+sorry, no warranty, no support. English Can understand only 3-year-old level.  
 [http://www.petitmonte.com/pdfdesigner/contact.html](http://www.petitmonte.com/pdfdesigner/contact.html)
 
 ## Author
