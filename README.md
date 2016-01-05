@@ -14,8 +14,6 @@ Japanese
 "pdf-designer-min.js"	 is Compressed version  
 
 Normal version is the source code with comments. Compressed version is exactly the same as normal version and functionality. Shortening variable name and deleted the comment & space.
-    
--Accompanying files-
   
 "pdf-designer-inc-jp.js"(Japanese) and "pdf-designer-inc-en.js"(English) file is defines the error. You do not need to read these files at the time of release. Instead wrap in the "try .. finally" or "try .. catch".
   
