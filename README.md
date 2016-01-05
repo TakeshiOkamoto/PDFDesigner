@@ -19,7 +19,7 @@ Normal version is the source code with comments. Compressed version is exactly t
   
 "pdf-designer-inc-jp.js"(Japanese) and "pdf-designer-inc-en.js"(English) file is defines the error. You do not need to read these files at the time of release. Instead wrap in the "try .. finally" or "try .. catch".
   
-...
+...  
 13 years ago of the code was transplanted. and first library in JavaScript. Logic is spaghetti :-)
 
 ## Supported file
