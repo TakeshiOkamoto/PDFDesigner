@@ -15,15 +15,12 @@ Japanese
 
 Normal version is the source code with comments. Compressed version is exactly the same as normal version and functionality. Shortening variable name and deleted the comment & space.
     
-Accompanying files
+-Accompanying files-
   
 "pdf-designer-inc-jp.js"(Japanese) and "pdf-designer-inc-en.js"(English) file is defines the error. You do not need to read these files at the time of release. Instead wrap in the "try .. finally" or "try .. catch".
-
-# Latest edition
-English  
-[http://www.petitmonte.com/pdfdesigner/en/download.html](http://www.petitmonte.com/pdfdesigner/en/download.html)   
-Japanese  
-[http://www.petitmonte.com/pdfdesigner/download.html](http://www.petitmonte.com/pdfdesigner/download.html)   
+  
+...
+13 years ago of the code was transplanted. and first library in JavaScript. Logic is spaghetti :-)
 
 ## Supported file
 Files that have been created at such as "Microsoft Office, OpenOffice and Chrome". Format is a file that conforms to the PDF1.4 format (such as ISO 19005-1). PDF1.5 later file can not be basically correspondence. but, can read if Internally PDF1.4 format.  
