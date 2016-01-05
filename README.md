@@ -3,8 +3,6 @@
   
 Because there is such as analysis class, you can add functionality.
 
-Now, it is being created
-
 ## How to use 
 English  
 [http://www.petitmonte.com/pdfdesigner/en/howto.html](http://www.petitmonte.com/pdfdesigner/en/howto.html)  
