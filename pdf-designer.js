@@ -594,6 +594,12 @@ TFileStream.prototype = {
             document.body.removeChild(a) //  FF specification
         }
     },
+    SaveToBlob: function () {
+        return new Blob([this.Stream.subarray(0, this.Size)], { type: "application/pdf" });
+    },
+    SaveToBlobUrl: function () {
+        return URL.createObjectURL(new Blob([this.Stream.subarray(0, this.Size)], { type: "application/pdf" }));
+    },
 }
 
 // ---------------------
@@ -3942,9 +3948,8 @@ function TPDFCombine() {
 //  TPDFCombine.Method 
 // ---------------------
 TPDFCombine.prototype = {
-
     // PDFファイルを結合する
-    SaveToFile: function (FileName, PDFAnalysts, PDFCallBack) {
+    init: function (PDFAnalysts, PDFCallBack) {
         var AStream = new TFileStream();
         var PageCount = 0;
         var PDFVersion = '1.4';
@@ -4020,9 +4025,21 @@ TPDFCombine.prototype = {
             setTimeout(PDFCallBack, 500, 100, PDFAnalysts.length, PDFAnalysts.length);
         }
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
     },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4049,7 +4066,7 @@ function TPDFKnife() {
 TPDFKnife.prototype = {
 
     // ページの抽出/分割
-    SaveToFile: function (FileName, PDFAnalyst, begin, end) {
+    init: function ( PDFAnalyst, begin, end) {
         var AStream = new TFileStream();
         var ObjectList = new Array();
         var PDFVersion = '1.4';
@@ -4116,8 +4133,20 @@ TPDFKnife.prototype = {
         // フッターの書き込み
         Parser.WritePDFFooter(AStream, this.Info);
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
+    },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
     }
 }
 
@@ -4145,7 +4174,7 @@ function TPDFDeletePage() {
 TPDFDeletePage.prototype = {
 
     // ページの削除
-    SaveToFile: function (FileName, PDFAnalyst, begin, end) {
+    init: function ( PDFAnalyst, begin, end) {
         var AStream = new TFileStream();
         var ObjectList = new Array();
         var PDFVersion = '1.4';
@@ -4218,8 +4247,20 @@ TPDFDeletePage.prototype = {
         // フッターの書き込み
         Parser.WritePDFFooter(AStream, this.Info)
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
+    },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
     }
 }
 
@@ -4241,7 +4282,7 @@ function TPDFRotatePage() {
 TPDFRotatePage.prototype = {
 
     // ページの回転(Rotate 1:右90度 2:左90度 3:180度)
-    SaveToFile: function (FileName, PDFAnalyst, Rotate, begin, end) {
+    init: function ( PDFAnalyst, Rotate, begin, end) {
         var Generation = new Array();
         var PageIDList = new Array();
         var AStream = new TFileStream();
@@ -4494,9 +4535,21 @@ TPDFRotatePage.prototype = {
         AStream.WriteString(this._ObjectMem.ObjectPosArray[this._ObjectMem.ObjectIndex] + '\n');
         AStream.WriteString('%%EOF\n');
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
     },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4545,7 +4598,7 @@ TPDFInfoMaker.prototype = {
     },
 
     // 文書情報の変更
-    SaveToFile: function (FileName, PDFAnalyst) {
+    init: function ( PDFAnalyst) {
         var AStream = new TFileStream();
 
         // 暗号の確認
@@ -4572,9 +4625,21 @@ TPDFInfoMaker.prototype = {
             PDFParser.WriteDummyInfo(PDFAnalyst, AStream);
         }
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
     },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5089,7 +5154,7 @@ TPDFOutLineMaker.prototype = {
     },
 
     // しおりの追加
-    SaveToFile: function (FileName, PDFAnalyst) {
+    init: function ( PDFAnalyst) {
         var AStream = new TFileStream();
 
         // 暗号の確認
@@ -5119,8 +5184,20 @@ TPDFOutLineMaker.prototype = {
             PDFParser.WriteDummyInfo(PDFAnalyst, AStream);
         }
 
-        // ファイルのダウンロード
-        AStream.SaveToFile(FileName);
+        return AStream;
     },
+    // ファイルのダウンロード
+    SaveToFile: function(FileName, ...arg){
+        AStream = this.init.apply(this, arg);
+        return AStream.SaveToFile(FileName);
+    },
+    SaveToBlob: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlob();
+    },
+    SaveToBlobUrl: function(){
+        AStream = this.init.apply(this, arguments);
+        return AStream.SaveToBlobUrl();
+    }
 }
 

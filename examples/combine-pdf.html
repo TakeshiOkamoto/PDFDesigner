@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="pdf-designer-min.js" type="text/javascript"></script>
+    <script src="pdf-designer-inc-en.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var Analysts = new Array();    
+     
+    function onChangeFile(event,index) {
+        var reader = new FileReader();
+        var file = event.target.files;
+        
+        document.getElementById("errmsg").innerHTML = '';
+        
+        reader.onload = function (event) {
+            var Stream = new Uint8Array(reader.result);
+            
+            Analysts[index] = new TPDFAnalyst();
+            
+            try {
+              
+                Analysts[index].LoadFromStream(Stream);
+                
+                if (Analysts[index].Encrypt) {
+                    document.getElementById("p"+(index+1)).innerHTML =
+                       'No' + (index+1) + ' PDF File - Unsupported';
+                    document.getElementById("errmsg").innerHTML = 
+                       'It does not support encrypted files.';
+                } else {
+                    document.getElementById("p"+(index+1)).innerHTML = 
+                       'No' + (index+1) + ' PDF File - [' + Analysts[index].PageCount +
+                        ' Pages / PDF' + Analysts[index].Version + ']';
+                }
+            } catch (e) {
+                Analysts[index] = null;
+                document.getElementById("p"+(index+1)).innerHTML =
+                'No' + (index+1) + ' PDF File - Unsupported';      
+                document.getElementById("errinf").innerHTML = e;
+                document.getElementById("errmsg").innerHTML =
+                   'No' + (index+1) +' PDF File is Not supported.';
+            }
+        }
+        reader.readAsArrayBuffer(file[0]);
+    }
+     
+    function run() {        
+        var PDFCombine = new TPDFCombine();
+        
+        if (Analysts[0] != null && Analysts[1] != null) {
+            try {
+                
+                var blobFile = PDFCombine.SaveToBlob(Analysts,1,1,Analysts.PageCount);
+                var blobUrl = URL.createObjectURL(blobFile);
+                
+                document.getElementById("viewer").src = blobUrl;
+                
+                document.getElementById("download").onclick = function(){
+                    if (window.navigator.msSaveBlob) {
+                        window.navigator.msSaveBlob(blobFile, PDF_GetDateTime_Now() + '.pdf');
+                    } else {
+                        var a = document.createElement("a");
+                        a.href = URL.createObjectURL(blobFile);
+                        //a.target   = '_blank';
+                        a.download = PDF_GetDateTime_Now() + '.pdf';
+                        document.body.appendChild(a) //  FF specification
+                        a.click();
+                        document.body.removeChild(a) //  FF specification
+                    }
+                }
+    
+                
+            } catch (e) {
+                Analysts[0] = null;
+                Analysts[1] = null;
+                document.getElementById("errinf").innerHTML = e;                
+                document.getElementById("errmsg").innerHTML = 
+                  'failed in the convert of the PDF file.';
+            }
+        } else {
+            document.getElementById("errmsg").innerHTML =
+              'Two PDF files, please select.';
+        }
+    }
+    </script>
+</head>
+<body>
+<h1>Combine of PDF</h1>
+<hr>
+<p>Two PDF files, please select.</p>
+<p id="errmsg" style="color:red;"></p>   
+<p id="errinf" style="color:red;"></p>   
+<p id="p1">No1 PDF File</p>
+<input type="file" id="inputfile1" accept="application/pdf" onchange="onChangeFile(event,0)"><br>
+<p id="p2">No2 PDF File</p>
+<input type="file" id="inputfile2" accept="application/pdf" onchange="onChangeFile(event,1)"><br>
+<br>
+<br>
+<br>
+<button id="run" style="width:200px;height:30px;" onclick="run();">Start Convert</button>
+<button id="download" style="width:200px;height:30px;">Download</button>
+<br>
+<br>
+<iframe id="viewer" class="col-span-2" style="height: 500px; width: 75%; visibility: visible;" frameborder="0" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0"></iframe>
+</body>
+<script>document.title = document.getElementsByTagName("h1")[0].innerText;</script>
+</html>
