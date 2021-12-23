@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../pdf-designer.js" type="text/javascript"></script>
+    <script src="../pdf-designer-inc-en.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var Analysts = new Array();    
+     
+    function onChangeFile(even){
+        var reader = new FileReader();
+        var file = event.target.files;
+        
+        document.getElementById("errmsg").innerHTML = '';
+        
+        reader.onload = function (event) {
+            var Stream = new Uint8Array(reader.result);
+            
+            Analyst = new TPDFAnalyst();
+            
+            try {
+              
+                Analyst.LoadFromStream(Stream);
+                
+                if (Analyst.Encrypt) {
+                    document.getElementById("p1").innerHTML =
+                       'PDF File - Unsupported';
+                    document.getElementById("errmsg").innerHTML = 
+                       'It does not support encrypted files.';
+                } else {
+                    document.getElementById("p1").innerHTML = 
+                       'PDF File - [' + Analyst.PageCount +
+                        ' Pages / PDF' + Analyst.Version + ']';
+                }
+            } catch (e) {
+                Analyst = null;
+                document.getElementById("errinf").innerHTML = e;
+                document.getElementById("p1").innerHTML =
+                   'PDF File - Unsupported';      
+                document.getElementById("errmsg").innerHTML =
+                   'PDF File is Not supported.';
+            }
+        }
+        reader.readAsArrayBuffer(file[0]);
+    }
+     
+    function run() {        
+        var PDFInfoMaker = new TPDFInfoMaker();
+        
+        if (Analyst != null) {
+            try {
+                
+                // Document information
+                PDFInfoMaker.Info.Title = 'Title - PDF.Designer.js';
+                PDFInfoMaker.Info.Subject = 'Subject - PDF.Designer.js';
+                PDFInfoMaker.Info.Author = 'Author - PDF.Designer.js';
+                PDFInfoMaker.Info.Keywords = 'Keywords - PDF.Designer.js';
+                PDFInfoMaker.Info.Creator = 'Creator - PDF.Designer.js';
+                PDFInfoMaker.Info.Producer = 'Producer - PDF.Designer.js';
+                PDFInfoMaker.Info.CreationDate = PDF_GetDateTime_Now();
+                PDFInfoMaker.Info.ModDate      = PDF_GetDateTime_Now();
+                
+                // Display settings (thumbnail)
+                PDFInfoMaker.View.PageMode = TPDFPageMode.pmUseThumbs;
+                                                                                                    
+                // @params (PDFAnalyst, begin, end)
+                var blobFile = PDFInfoMaker.SaveToBlob(Analyst,1,1,Analyst.PageCount);
+                var blobUrl = URL.createObjectURL(blobFile);
+                
+                document.getElementById("viewer").src = blobUrl;
+                
+                document.getElementById("download").onclick = function(){
+                    if (window.navigator.msSaveBlob) {
+                        window.navigator.msSaveBlob(blobFile, PDF_GetDateTime_Now() + '.pdf');
+                    } else {
+                        var a = document.createElement("a");
+                        a.href = URL.createObjectURL(blobFile);
+                        //a.target   = '_blank';
+                        a.download = PDF_GetDateTime_Now() + '.pdf';
+                        document.body.appendChild(a) //  FF specification
+                        a.click();
+                        document.body.removeChild(a) //  FF specification
+                    }
+                }
+    
+                
+            } catch (e) {
+                Analyst = null;
+                
+                document.getElementById("errinf").innerHTML = e;
+                document.getElementById("errmsg").innerHTML = 
+                  'failed in the convert of the PDF file.';
+            }
+        } else {
+            document.getElementById("errmsg").innerHTML =
+              'No PDF files, please select.';
+        }
+    }
+    </script>
+</head>
+<body>
+<h1>Property & Display settings of PDF</h1>
+<hr>
+<p>Change all of the document information. And makes the display settings on the thumbnail.</p>
+<p id="errmsg" style="color:red;"></p>   
+<pre id="errinf" style="color:red;"></pre>   
+<p id="p1">PDF File</p>
+<input type="file" id="inputfile1" accept="application/pdf" onchange="onChangeFile(event)"><br>
+<br>
+<br>
+<br>
+<button id="run" style="width:200px;height:30px;" onclick="run();">Start Convert</button>
+<button id="download" style="width:200px;height:30px;">Download</button>
+<br>
+<br>
+<iframe id="viewer" class="col-span-2" style="height: 500px; width: 75%; visibility: visible;" frameborder="0" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0"></iframe>
+</body>
+<script>document.title = document.getElementsByTagName("h1")[0].innerText;</script>
+</html>
